@@ -13,6 +13,7 @@ library(tidyverse)
 
 ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
 details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
+comprehensive <- full_join(details, ratings, by = "id")
 ```
 
 # Dataset
