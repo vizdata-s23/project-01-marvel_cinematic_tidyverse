@@ -5,6 +5,8 @@ format: html
 editor: visual
 ---
 
+# Dataset
+
 ```{r}
 #| label: load-pkgs
 #| message: false
@@ -13,19 +15,35 @@ library(tidyverse)
 
 ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
 details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
-comprehensive <- full_join(details, ratings, by = "id")
+comprehensive <- full_join(details, ratings, by = "id") |>
+  filter(owned > 500) |>
+  select(-num.x, -num.y, -year)
 ```
 
-# Dataset
+We chose the Tidy Tuesday dataset, Board Games, published on January 25th, 2022. Originally collected from [Kaggle](https://www.kaggle.com/datasets/jvanelteren/boardgamegeek-reviews?select=2022-01-08.csv), it combines board game descriptions and reviews from [Board Game Geek](https://www.boardgamegeek.com/). Founded in 2000, Board Game Geek serves as an online community for board gaming hobbyists. They house a game database and have gained popularity and viewership from their annual Golden Geek Award, which medals the best new board game of the year. 
 
-A brief description of your dataset including its provenance, dimensions, etc. as well as the reason why you chose this dataset.
+This data set stood out to us because we all share fond memories from playing board games but have never stopped to think about the industry as a whole and trends within it. The extensive collection of data was also alluring with its recent expansion of 4 million additional reviews in January of 2022. 
 
-Make sure to load the data and use inline code for some of this information.
+With 30 distinct characteristics and 21831 board games, the data holds answers to a multitude of questions, but specifically, we are interested in using data visualizations to explore the relationships between variables such as number of players, rating, number of expansions, and game ownership. \
 
 # Questions
 
-The two questions you want to answer.
+Question 1: Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
+
+Question 2: How have the number of expansions for board games changed over time, and have they had an impact on game ownership count?
 
 # Analysis plan
 
-A plan for answering each of the questions including the variables involved, variables to be created (if any), external data to be merged in (if any).
+[For Question 1]{.underline}, we would like to explore whether the difference between the min players and max players of a board game are correlated with the ratings of that game. Does having more flexibility in the amount of players that can play a game lead to higher ratings?
+
+\
+In order to determine the relationship between the board game ratings and player differentials, we will first need to create a new variable **differential** which is calculated by subtracting the min_players from the max_players of a board game within a mutation function. The differential will then be plotted against the board game ratings as a geom_line graph with ratings on the y-axis and differential on the x-axis. We will then determine whether or not there is any relationship between the two values.
+
+[For Question 2]{.underline}, we will first create a numerical variable num_expansions. This takes the number of unique entries in the boardgameexpansion variable and returns a count. Our next step is to create a simple mutation -- after grouping by yearpublished, we will see how many expansions were released per game published (num_expansions_per_game). We\'ll then visualize the relationship between yearpublished and num_expansions to represent the prevalence of this trend over time, using a line graph. (We\'ll also include the total number of games published as additional context, since we want to know how popular games are becoming overall.) 
+
+\
+
+The second part of our question can be answered by creating a second visualization. This time, we will group games by the num_expansions variable to see how their sales (represented by total ownership, or the owned variable) change. This will be a density plot with the year as the explanatory variable, different linetypes for the num_expansions, and density as a reflection of total sales.
+
+\
+\
