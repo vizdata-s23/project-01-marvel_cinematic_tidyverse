@@ -5,7 +5,7 @@ format: html
 editor: visual
 ---
 
-# Dataset
+## Dataset
 
 ```{r}
 #| label: load-pkgs
@@ -26,13 +26,13 @@ This data set stood out to us because we all share fond memories from playing bo
 
 With \``r ncol(comprehensive)`\`distinct characteristics and \``r nrow(comprehensive)`\`board games, the data holds answers to a multitude of questions, but specifically, we are interested in using data visualizations to explore the relationships between variables such as number of players, rating, number of expansions, and game ownership.\
 
-# Questions
+## Questions
 
 Question 1: Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
 
 Question 2: How have the number of expansions for board games changed over time, and have they had an impact on game ownership count?
 
-# Analysis plan
+## Analysis plan
 
 [For Question 1]{.underline}, we would like to explore whether the difference between the min players and max players of a board game are correlated with the ratings of that game. Does having more flexibility in the amount of players that can play a game lead to higher ratings?
 
