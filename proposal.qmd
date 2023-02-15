@@ -42,8 +42,6 @@ In order to determine the relationship between the board game ratings and player
 
 [For Question 2]{.underline}, we will first create a numerical variable num_expansions. This takes the number of unique entries in the boardgameexpansion variable and returns a count. Our next step is to create a simple mutation -- after grouping by yearpublished, we will see how many expansions were released per game published (num_expansions_per_game). We'll then visualize the relationship between yearpublished and num_expansions to represent the prevalence of this trend over time, using a line graph. (We'll also include the total number of games published as additional context, since we want to know how popular games are becoming overall.) 
 
-\
-
 The second part of our question can be answered by creating a second visualization. This time, we will group games by the num_expansions variable to see how their sales (represented by total ownership, or the owned variable) change. This will be a density plot with the year as the explanatory variable, different linetypes for the num_expansions, and density as a reflection of total sales.
 
 \
