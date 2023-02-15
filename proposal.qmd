@@ -18,7 +18,7 @@ ratings <- readr::read_csv('data/ratings.csv')
 details <- readr::read_csv('data/details.csv')
 comprehensive <- full_join(details, ratings, by = "id") |>
   filter(owned > 500) |>
-  select(-num.x, -num.y, -year)
+  select(-num.x, -num.y, -year, -name)
 ```
 
 We chose the Tidy Tuesday dataset, Board Games, published on January 25th, 2022. Originally collected from [Kaggle](https://www.kaggle.com/datasets/jvanelteren/boardgamegeek-reviews?select=2022-01-08.csv), it combines board game descriptions and reviews from [Board Game Geek](https://www.boardgamegeek.com/). Founded in 2000, Board Game Geek serves as an online community for board gaming hobbyists. They house a game database and have gained popularity and viewership from their annual Golden Geek Award, which medals the best new board game of the year. 
