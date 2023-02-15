@@ -25,7 +25,7 @@ We chose the Tidy Tuesday dataset, Board Games, published on January 25th, 2022.
 
 This data set stood out to us because we all share fond memories from playing board games but have never stopped to think about the industry as a whole and trends within it. The extensive collection of data was also alluring with its recent expansion of 4 million additional reviews in January of 2022. 
 
-With `r ncol(comprehensive)`distinct characteristics and `r nrow(comprehensive)` board games, the data holds answers to a multitude of questions, but specifically, we are interested in using data visualizations to explore the relationships between variables such as number of players, rating, number of expansions, and game ownership.\
+With `r ncol(comprehensive)` distinct characteristics and `r nrow(comprehensive)` board games, the data holds answers to a multitude of questions, but specifically, we are interested in using data visualizations to explore the relationships between variables such as number of players, rating, number of expansions, and game ownership.\
 
 ## Questions
 
