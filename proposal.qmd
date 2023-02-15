@@ -14,8 +14,8 @@ editor: visual
 
 library(tidyverse)
 
-ratings <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/ratings.csv')
-details <- readr::read_csv('https://raw.githubusercontent.com/rfordatascience/tidytuesday/master/data/2022/2022-01-25/details.csv')
+ratings <- readr::read_csv('data/ratings.csv')
+details <- readr::read_csv('data/details.csv')
 comprehensive <- full_join(details, ratings, by = "id") |>
   filter(owned > 500) |>
   select(-num.x, -num.y, -year)
