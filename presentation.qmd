@@ -41,8 +41,13 @@ knitr::opts_chunk$set(
 ```{r}
 #| label: load-data
 #| include: false
+#| message : false
 
-# Load your data here
+ratings <- readr::read_csv('data/ratings.csv')
+details <- readr::read_csv('data/details.csv')
+comprehensive <- full_join(details, ratings, by = "id") |>
+  filter(owned > 500) |>
+  select(-num.x, -num.y, -year, -name)
 ```
 
 # Using Quarto for presentations
@@ -120,6 +125,40 @@ ggplot(
   ) +
   geom_point() + 
   theme_minimal()
+```
+
+```{r}
+
+#| label: scatter-plot-question-1
+#| echo: false
+#| warning: false
+
+comprehensive_q1 <- comprehensive |>
+  mutate(
+    differential = maxplayers-minplayers
+  ) |>
+  filter(differential >= 0 & differential <20)
+  #there are 59 games with >90 differential, include? 
+
+  ggplot(comprehensive_q1, aes(x=differential, y = average)) +
+  geom_point() +
+    labs(title = "differentials (0,20)")
+
+```
+
+```{r}
+
+#| label: heat-map-question-1
+#| echo: false
+#| warning: false
+
+comprehensive_heat <- comprehensive |>
+  #maxplayers unique values: 4   5   7   8   2   6  10  30 100  12   1  99   3 20  18  13  16  24 15  68   0   9  75  11  50  36  21 200  38  52  25  22 999  17
+  filter(maxplayers <25)
+
+ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
+  geom_tile() +
+  labs(title = "maxplayers<25")
 ```
 
 ## Plot and text
