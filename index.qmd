@@ -11,16 +11,42 @@ editor: visual
 (1 paragraph): Project abstract.
 
 ------------------------------------------------------------------------
+```{r}
+#| label: load-packages
+#| include: false
+
+library(tidyverse)
+
+```
+
+```{r}
+#| label: load-data
+#| include: false
+#| message : false
+
+ratings <- readr::read_csv('data/ratings.csv')
+details <- readr::read_csv('data/details.csv')
+comprehensive <- full_join(details, ratings, by = "id") |>
+  filter(owned > 500) |>
+  select(-num.x, -num.y, -year, -name)
+```
+
 
 ## Introduction
 
-(1-2 paragraphs): Brief introduction to the dataset. You may repeat some of the information about the dataset provided in the introduction to the dataset on the TidyTuesday repository, paraphrasing on your own terms. Imagine that your project is a standalone document and the grader has no prior knowledge of the dataset.
+The Board Games Tidy Tuesday dataset, published on January 25th, 2022, was originally collected from [Kaggle](https://www.kaggle.com/datasets/jvanelteren/boardgamegeek-reviews?select=2022-01-08.csv). It combines board game descriptions and reviews from [Board Game Geek](https://www.boardgamegeek.com/), which is an online community for board gaming hobbyists.
+
+With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`. 
 
 ## Question 1: Title that relates to the question you're answering
 
 ### Introduction
 
-(1-2 paragraphs): Introduction to the question and what parts of the dataset are necessary to answer the question. Also discuss why you're interested in this question.
+(1-2 paragraphs): Introduction to the question and what parts of the data set are necessary to answer the question. Also discuss why you're interested in this question.
+
+Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
+
+This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game. 
 
 ### Approach
 
