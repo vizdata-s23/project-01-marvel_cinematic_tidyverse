@@ -197,9 +197,14 @@ comprehensive_heat <- comprehensive |>
   #maxplayers unique values: 4   5   7   8   2   6  10  30 100  12   1  99   3 20  18  13  16  24 15  68   0   9  75  11  50  36  21 200  38  52  25  22 999  17
   filter(maxplayers <50)
 
-ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
-  geom_tile() +
-  labs(title = "maxplayers<50")
+p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
+  geom_tile() + scale_fill_gradient(low = "white", high = "red")+
+  labs(title = "Average Differential Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Differential") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5,
+                                barheight = 8))
+
+p
+
+#ggplotly(p, tooltip="text")
 ```
 
 ```{r}
