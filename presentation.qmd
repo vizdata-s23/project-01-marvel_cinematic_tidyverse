@@ -10,6 +10,7 @@ format: revealjs
 editor: visual
 execute:
   echo: false
+  warning: false
 ---
 
 ```{r}
@@ -58,7 +59,7 @@ comprehensive <- full_join(details, ratings, by = "id") |>
 
 -   Explain dataset or questions or both?
 
-## Question 1 
+## Question 1, Plot 1
 
 ```{r}
 #| label: scatter-plot-question-1
@@ -98,7 +99,7 @@ comprehensive_q1 <- comprehensive |>
     theme_minimal()
 ```
 
-## Question 1 
+## Question 1, Plot 2
 
 ```{r}
 #| label: heat-map-question-1
@@ -116,21 +117,34 @@ p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average
 p
 ```
 
-## Question 2 
+## Question 2, Plot 1
 
 ```{r}
-# comprehensive_plot4 <- comprehensive |>
-#   mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
-#   replace_na(0)
-# 
-# comprehensive_plot4 |>
-#   ggplot(aes(x = expansions)) +
-#   geom_bar() + 
-#   scale_x_discrete(limits = c("0", ))
-
-#ggplot(aes(x = factor(expansions), y = average)) + geom_violin()
-
 
 ```
 
-## Question 2 
+## Question 2, Plot 2
+
+```{r}
+comprehensive_plot4 <- comprehensive |>
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1,
+         expansions = replace_na(expansions, 0))
+
+comprehensive_plot4 |>
+  group_by(expansions) |>
+  summarize(count = n()) |>
+  filter(count > 100)
+
+comprehensive_plot4 |>
+  ggplot(aes(x = factor(expansions))) +
+  geom_bar() +
+  scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
+  geom_hline(yintercept = 100, color = "red")
+
+comprehensive_plot4 |>
+  filter(expansions < 7) |>
+  ggplot(aes(x = factor(expansions), y = log(owned))) + 
+  geom_boxplot()
+```
+
+## Question 2
