@@ -22,6 +22,8 @@ library(tidyverse)
 library(tidymodels)
 library(palmerpenguins)
 library(gt)
+library(hexbin)
+
 ```
 
 ```{r}
@@ -137,13 +139,52 @@ comprehensive_q1 <- comprehensive |>
   mutate(
     differential = maxplayers-minplayers
   ) |>
-  filter(differential >= 0 & differential <20)
+  filter(differential >= 0 & differential <25) |>
+  group_by(differential) |>
+  mutate(
+    average_rating = mean(average)
+  )
   #there are 59 games with >90 differential, include? 
 
-  ggplot(comprehensive_q1, aes(x=differential, y = average)) +
+  ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
+    geom_point(
+    aes(x=differential,
+          y = average,
+          colour = "gray",
+          alpha = .05),
+         show.legend = FALSE) +
+  # geom_boxplot(aes(y=average, group = differential)) + 
   geom_point() +
-    labs(title = "differentials (0,20)")
+    geom_line(
+      aes(
+        colour = "blue"
+      ),
+      show.legend = FALSE
+    ) +
+    scale_x_continuous(breaks = seq(0,25,5), minor_breaks = c(0:25)) +
+    scale_y_continuous(breaks = seq(2,10,1), minor_breaks = seq(2,10,.5)) +
+    labs(
+      x = "Difference Between Max and Min Players",
+      y = "Rating",
+      title = "Relationship Between Rating and Range of Amount of Players Permitted") +
+    theme() +
+    theme_minimal()
+```
 
+```{r}
+#another attempt at q1 part 1 
+# ggplot(comprehensive_q1, aes(x=differential, y = average)) +
+#   stat_bin_2d() +
+#   geom_point(aes(y=average_rating)) +
+#   geom_line(
+#       aes(
+#         colour = "blue",
+#        y=average_rating
+#       ),
+#       show.legend = FALSE
+#     ) +
+#   labs(title = "heatmap and average rating line") +
+#   theme_minimal()
 ```
 
 ```{r}
@@ -154,11 +195,11 @@ comprehensive_q1 <- comprehensive |>
 
 comprehensive_heat <- comprehensive |>
   #maxplayers unique values: 4   5   7   8   2   6  10  30 100  12   1  99   3 20  18  13  16  24 15  68   0   9  75  11  50  36  21 200  38  52  25  22 999  17
-  filter(maxplayers <25)
+  filter(maxplayers <50)
 
 ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
   geom_tile() +
-  labs(title = "maxplayers<25")
+  labs(title = "maxplayers<50")
 ```
 
 ## Plot and text
