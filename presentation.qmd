@@ -49,7 +49,7 @@ ratings <- readr::read_csv('data/ratings.csv')
 details <- readr::read_csv('data/details.csv')
 comprehensive <- full_join(details, ratings, by = "id") |>
   filter(owned > 500) |>
-  select(-num.x, -num.y, -year, -name)
+  select(-num.x, -num.y, -year, -name, -thumbnail, -url)
 ```
 
 # Using Quarto for presentations
@@ -200,6 +200,19 @@ comprehensive_heat <- comprehensive |>
 ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
   geom_tile() +
   labs(title = "maxplayers<50")
+```
+
+```{r}
+comprehensive_plot4 <- comprehensive |>
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
+  replace_na(0)
+
+comprehensive_plot4 |>
+  ggplot(aes(x = expansions)) +
+  geom_bar() + 
+  scale_x_discrete(limits = c("0", ))
+
+#ggplot(aes(x = factor(expansions), y = average)) + geom_violin()
 ```
 
 ## Plot and text

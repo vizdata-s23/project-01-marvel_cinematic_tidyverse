@@ -11,6 +11,7 @@ editor: visual
 (1 paragraph): Project abstract.
 
 ------------------------------------------------------------------------
+
 ```{r}
 #| label: load-packages
 #| include: false
@@ -31,12 +32,11 @@ comprehensive <- full_join(details, ratings, by = "id") |>
   select(-num.x, -num.y, -year, -name)
 ```
 
-
 ## Introduction
 
 The Board Games Tidy Tuesday dataset, published on January 25th, 2022, was originally collected from [Kaggle](https://www.kaggle.com/datasets/jvanelteren/boardgamegeek-reviews?select=2022-01-08.csv). It combines board game descriptions and reviews from [Board Game Geek](https://www.boardgamegeek.com/), which is an online community for board gaming hobbyists.
 
-With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`. 
+With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`.
 
 ## Question 1: Title that relates to the question you're answering
 
@@ -46,7 +46,7 @@ With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehe
 
 Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
 
-This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game. 
+This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game.
 
 ### Approach
 
@@ -71,6 +71,10 @@ This first question of interest will utilize the variables in the data set that 
 (1-2 paragraphs): Describe what types of plots you are going to make to address your question. For each plot, provide a clear explanation as to why this plot (e.g. boxplot, barplot, histogram, etc.) is best for providing the information you are asking about. The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
 
 ### Analysis
+
+```{r}
+
+```
 
 (2-3 code blocks, 2 figures, text/code comments as needed): In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides. You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so. All plots must be made with **ggplot2**. Do not use base R or lattice plotting functions.
 
