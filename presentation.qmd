@@ -1,7 +1,7 @@
 ---
-title: "Project title"
+title: "Are You Board Yet?"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
-author: "Team Name"
+author: "Marvel Cinematic Tidyverse"
 title-slide-attributes:
   data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
   data-background-size: stretch
@@ -52,233 +52,85 @@ comprehensive <- full_join(details, ratings, by = "id") |>
   select(-num.x, -num.y, -year, -name, -thumbnail, -url)
 ```
 
-# Using Quarto for presentations
+## Introduction
 
-## Quarto
+-   What do we want to write here?
 
--   The presentation is created using the Quarto CLI
+-   Explain dataset or questions or both?
 
--   `##` sets the start of a new slide
-
-## Layouts
-
-You can use plain text
-
--   or bullet points
-
-::: columns
-::: {.column width="50%"}
-or text in two columns $^*$
-:::
-
-::: {.column width="50%"}
--   like
--   this
-:::
-:::
-
-### 
-
-::: aside
-\[\*\] And add footnotes
-:::
-
-## Code
+## Question 1 
 
 ```{r}
-#| label: boring-regression
-
-# a boring regression
-model <- lm(dist ~ speed, data = cars)
-tidy(model)
-glance(model)
-```
-
-## Plots
-
-```{r}
-#| label: recode-species
-#| echo: false
-
-# In this chunk I'm doing a bunch of analysis that I don't want to present 
-# in my slides. But I need the resulting data frame for a plot I want to present.
-
-penguins_modified <- penguins %>%
-  mutate(species = fct_other(species, keep = "Adelie"))
-```
-
-```{r}
-#| label: plot-penguins
-#| echo: false
-#| warning: false
-#| fig-alt: |
-#|   Body mass vs. flipper lenght of Palmer Penguins for species Adelie and all 
-#|   the others combined together. There is a relatively strong, positive 
-#|   relationship between the two variables. The Adelie penguins are clustered 
-#|   together but they don't exhibit a different trend than the rest of the 
-#|   penguins.
-
-# Uses modified penguins dataset from previous chunk
-# Play around with height and width until you're happy with the look
-
-ggplot(
-  penguins_modified, 
-  aes(x = flipper_length_mm, y = body_mass_g, color = species)
-  ) +
-  geom_point() + 
-  theme_minimal()
-```
-
-```{r}
-
 #| label: scatter-plot-question-1
 #| echo: false
 #| warning: false
-
 comprehensive_q1 <- comprehensive |>
   mutate(
     differential = maxplayers-minplayers
   ) |>
-  filter(differential >= 0 & differential <25) |>
+  filter(differential >= 0 & differential < 25) |>
   group_by(differential) |>
   mutate(
     average_rating = mean(average)
   )
-  #there are 59 games with >90 differential, include? 
 
   ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
-    geom_point(
+    geom_jitter(
+      colour = "gray",
+      alpha = .6,
     aes(x=differential,
-          y = average,
-          colour = "gray",
-          alpha = .05),
+          y = average),
          show.legend = FALSE) +
-  # geom_boxplot(aes(y=average, group = differential)) + 
-  geom_point() +
     geom_line(
-      aes(
-        colour = "blue"
-      ),
-      show.legend = FALSE
+      linetype = 2,
+      colour = "#FFCCCB"
+      ) +
+    geom_point(
+      colour = "red"
     ) +
     scale_x_continuous(breaks = seq(0,25,5), minor_breaks = c(0:25)) +
     scale_y_continuous(breaks = seq(2,10,1), minor_breaks = seq(2,10,.5)) +
     labs(
-      x = "Difference Between Max and Min Players",
+      x = "Differential",
       y = "Rating",
-      title = "Relationship Between Rating and Range of Amount of Players Permitted") +
-    theme() +
+      title = "Average Rating as Differential Increases ",
+      subtitle = "Suggests Minimal Relationship") +
     theme_minimal()
 ```
 
-```{r}
-#another attempt at q1 part 1 
-# ggplot(comprehensive_q1, aes(x=differential, y = average)) +
-#   stat_bin_2d() +
-#   geom_point(aes(y=average_rating)) +
-#   geom_line(
-#       aes(
-#         colour = "blue",
-#        y=average_rating
-#       ),
-#       show.legend = FALSE
-#     ) +
-#   labs(title = "heatmap and average rating line") +
-#   theme_minimal()
-```
+## Question 1 
 
 ```{r}
-
 #| label: heat-map-question-1
 #| echo: false
 #| warning: false
 
 comprehensive_heat <- comprehensive |>
-  #maxplayers unique values: 4   5   7   8   2   6  10  30 100  12   1  99   3 20  18  13  16  24 15  68   0   9  75  11  50  36  21 200  38  52  25  22 999  17
   filter(maxplayers <50)
 
 p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
   geom_tile() + scale_fill_gradient(low = "white", high = "red")+
-  labs(title = "Average Differential Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Differential") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5,
+  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5,
                                 barheight = 8))
 
 p
-
-#ggplotly(p, tooltip="text")
 ```
 
-```{r}
-comprehensive_plot4 <- comprehensive |>
-  mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
-  replace_na(0)
+## Question 2 
 
-comprehensive_plot4 |>
-  ggplot(aes(x = expansions)) +
-  geom_bar() + 
-  scale_x_discrete(limits = c("0", ))
+```{r}
+# comprehensive_plot4 <- comprehensive |>
+#   mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
+#   replace_na(0)
+# 
+# comprehensive_plot4 |>
+#   ggplot(aes(x = expansions)) +
+#   geom_bar() + 
+#   scale_x_discrete(limits = c("0", ))
 
 #ggplot(aes(x = factor(expansions), y = average)) + geom_violin()
+
+
 ```
 
-## Plot and text
-
-::: columns
-::: {.column width="50%"}
--   Some text
--   goes here
-:::
-
-::: {.column width="50%"}
-```{r}
-#| warning: false
-#| out-width: "100%"
-#| fig-width: 4
-#| echo: false
-
-# See how I changed out-width and fig-width from defaults
-# to make the figure bigger
-
-ggplot(penguins, aes(x = bill_length_mm, y = species, color = species)) +
-  geom_boxplot() +
-  theme_minimal()
-```
-:::
-:::
-
-# A new section...
-
-## Tables
-
-If you want to generate a table, make sure it is in the HTML format (instead of Markdown or other formats), e.g.,
-
-```{r}
-#| label: penguins-table
-
-gt(head(penguins))
-```
-
-## Images
-
-![Image credit: Danielle Navarro, Percolate.](images/watercolour_sys02_img34_teacup-ocean.png)
-
-## Math Expressions {.smaller}
-
-You can write LaTeX math expressions inside a pair of dollar signs, e.g. \$\alpha+\beta\$ renders $\alpha+\beta$. You can use the display style with double dollar signs:
-
-    $$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-$$\bar{X}=\frac{1}{n}\sum_{i=1}^nX_i$$
-
-Limitations:
-
-1.  The source code of a LaTeX math expression must be in one line, unless it is inside a pair of double dollar signs, in which case the starting `$$` must appear in the very beginning of a line, followed immediately by a non-space character, and the ending `$$` must be at the end of a line, led by a non-space character;
-
-2.  There should not be spaces after the opening `$` or before the closing `$`.
-
-# Wrap up
-
-## Feeling adventurous?
-
--   You are welcomed to use the default styling of the slides. In fact, that's what I expect majority of you will do. You will differentiate yourself with the content of your presentation.
-
--   But some of you might want to play around with slide styling. Some solutions for this can be found at https://quarto.org/docs/presentations/revealjs.
+## Question 2 
