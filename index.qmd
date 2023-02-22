@@ -11,6 +11,7 @@ editor: visual
 (1 paragraph): Project abstract.
 
 ------------------------------------------------------------------------
+
 ```{r}
 #| label: load-packages
 #| include: false
@@ -31,12 +32,11 @@ comprehensive <- full_join(details, ratings, by = "id") |>
   select(-num.x, -num.y, -year, -name)
 ```
 
-
 ## Introduction
 
 The Board Games Tidy Tuesday dataset, published on January 25th, 2022, was originally collected from [Kaggle](https://www.kaggle.com/datasets/jvanelteren/boardgamegeek-reviews?select=2022-01-08.csv). It combines board game descriptions and reviews from [Board Game Geek](https://www.boardgamegeek.com/), which is an online community for board gaming hobbyists.
 
-With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`. 
+With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`.
 
 ## Question 1: Title that relates to the question you're answering
 
@@ -46,18 +46,17 @@ With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehe
 
 Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
 
-This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game. 
+This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game.
 
-TO-DO: ADD PLOT 2 INTRO 
+TO-DO: ADD PLOT 2 INTRO
 
 ### Approach
 
 (1-2 paragraphs): Describe what types of plots you are going to make to address your question. For each plot, provide a clear explanation as to why this plot (e.g. boxplot, barplot, histogram, etc.) is best for providing the information you are asking about. The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
 
-To address this question, the first plot we made visualizes how the rating changes as the differential between the maximum and minimum number of players increases. The differential is plotted on the x-axis and the rating is plotted on the y-axis. A scatterplot is most effective in displaying all the points in order to show the audience that majority of board games have differentials of around 0 to 5 players. We combined this with a line graph because incorporating a line connecting the average rating for each differential more clearly and immediately suggests the lack of relationship between the variables of interest. 
+To address this question, the first plot we made visualizes how the rating changes as the differential between the maximum and minimum number of players increases. The differential is plotted on the x-axis and the rating is plotted on the y-axis. A scatterplot is most effective in displaying all the points in order to show the audience that majority of board games have differentials of around 0 to 5 players. We combined this with a line graph because incorporating a line connecting the average rating for each differential more clearly and immediately suggests the lack of relationship between the variables of interest.
 
-TO-DO: ADD PLOT 2 APPROACH
-
+We also created a heatmap to visualize the average rating of a game based on both the minimum and maximum number of players. The minimum number of players is plotted on the y axis and the maximum number of players is plotted on the x axis with the average rating as the fill for the heatmap. The darker red the fill, the higher the average rating was for the game at that coordinate. We zoomed into the map with limits of x = (0,12) and y = (0,5) because there was not much data beyond that range. The heatmap displays similar data to the scatterplot created before, but it is still useful to support our observations in the scatterplot. A heatmap allows us to visualize minimum players, maximum players, and the average rating without creating a differential variable. This way, we do not lose information about the maximum and minimum number of players, while still gleaning information about the interaction between the two.
 
 ### Analysis
 
@@ -114,10 +113,9 @@ TO-DO: ADD PLOT 2 CODE
 
 (1-3 paragraphs): In the Discussion section, interpret the results of your analysis. Identify any trends revealed (or not revealed) by the plots. Speculate about why the data looks the way it does.
 
-From the first plot, the red line that connects the average ratings suggests that there is a minimal relationship between the differential of players and the board game's rating. This is surprising to us because we had initially believed that games that can incorporate a wider range of people would be more popular, since you would be able to play it in a greater variety of scenarios (with more or less players). Similarily, we noticed in the dataset that games with larger differentials were commonly classified as party games or trivia games, which we also speculated may increase their rating. We can see that the number of board game observations decreases as the differential increases, so this can explain why the trend line is less consistent as the differential increases. We speculate that there are less games that have greater differentials in general, so that is reflected in this dataset. 
+From the first plot, the red line that connects the average ratings suggests that there is a minimal relationship between the differential of players and the board game's rating. This is surprising to us because we had initially believed that games that can incorporate a wider range of people would be more popular, since you would be able to play it in a greater variety of scenarios (with more or less players). Similarily, we noticed in the dataset that games with larger differentials were commonly classified as party games or trivia games, which we also speculated may increase their rating. We can see that the number of board game observations decreases as the differential increases, so this can explain why the trend line is less consistent as the differential increases. We speculate that there are less games that have greater differentials in general, so that is reflected in this dataset.
 
-TO-DO: ADD PLOT 2 DISCUSSION 
-
+TO-DO: ADD PLOT 2 DISCUSSION
 
 ## Question 2: Title that relates to the question you're answering
 
@@ -129,24 +127,20 @@ How have the number of expansions for board games changed over time, and have th
 
 TO-DO: ADD Q2 INTRO
 
-
 ### Approach
 
 (1-2 paragraphs): Describe what types of plots you are going to make to address your question. For each plot, provide a clear explanation as to why this plot (e.g. boxplot, barplot, histogram, etc.) is best for providing the information you are asking about. The two plots should be of different types, and at least one of the two plots needs to use either color mapping or facets.
 
-TO-DO:  
-
+TO-DO:
 
 ### Analysis
 
 (2-3 code blocks, 2 figures, text/code comments as needed): In this section, provide the code that generates your plots. Use scale functions to provide nice axis labels and guides. You are welcome to use theme functions to customize the appearance of your plot, but you are not required to do so. All plots must be made with **ggplot2**. Do not use base R or lattice plotting functions.
 
-TO-DO:  
+TO-DO:
 
 ### Discussion
 
 (1-3 paragraphs): In the Discussion section, interpret the results of your analysis. Identify any trends revealed (or not revealed) by the plots. Speculate about why the data looks the way it does.
 
-TO-DO:  
-
-
+TO-DO:
