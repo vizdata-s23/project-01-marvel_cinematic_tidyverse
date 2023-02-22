@@ -128,6 +128,10 @@ comprehensive_plot3 <- comprehensive |>
 ## Question 2, Plot 2
 
 ```{r}
+#| label: Question 2 - Plot 1
+#| echo: false
+#| warning: false
+
 comprehensive_plot4 <- comprehensive |>
   mutate(expansions = str_count(boardgameexpansion, ',') + 1,
          expansions = replace_na(expansions, 0))
@@ -141,12 +145,12 @@ comprehensive_plot4 |>
   ggplot(aes(x = factor(expansions))) +
   geom_bar() +
   scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
-  geom_hline(yintercept = 100, color = "red")
+  geom_hline(yintercept = 100, color = "red") + labs(title = "Board Game Expansions vs Number Owned", x = "Number of Expansions", y = "Number Owned")
 
 comprehensive_plot4 |>
   filter(expansions < 7) |>
   ggplot(aes(x = factor(expansions), y = log(owned))) + 
-  geom_boxplot()
+  geom_boxplot() + labs(title = "Board Game Expansions vs Number Owned", x = "log(Number of Expansions)", y = "log(Number Owned)")
 ```
 
 ## Question 2
