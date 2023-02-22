@@ -129,8 +129,6 @@ p
 
 ```{r}
 #| label: path-diagram-question-2
-#| echo: false
-#| warning: false
 
 comprehensive_plot3_expansions <- comprehensive |>
   mutate(expansions = str_count(boardgameexpansion, ',') + 1,
@@ -152,7 +150,7 @@ comprehensive_plot3 <- comprehensive_plot3_averages |>
 description_2001 <- "2001: BGG goes online." |>
   str_wrap(width = 25)
 
-description_2019 <- "2019: Games registered on BGG had an average rating of 7.25, the highest ever recorded thus far." |>
+description_2019 <- "2019: Games registered on BGG had an average rating of 7.25, the highest recorded thus far." |>
   str_wrap(width = 18)
 
 description_2011 <- "2011: There's a massive increase in the number of expansions released, but average rating stays the same." |>

@@ -4,6 +4,9 @@ subtitle: "STA/ISS 313 - Project 1"
 author: "Marvel Cinematic Tidyverse"
 format: html
 editor: visual
+execute:
+  echo: false
+  warning: false
 ---
 
 ## Abstract
@@ -70,7 +73,6 @@ We also created a heatmap to visualize the average rating of a game based on bot
 ```{r}
 
 #| label: fig-scatter-plot-question-1
-#| warning: false
 
 #data preparation 
 #filter data for differentials between 0 and 25 
@@ -87,7 +89,7 @@ comprehensive_plot1 <- comprehensive |>
 
 #plotting each differential and its average rating with a scatter plot 
 #adding layer of a line that connects each average rating per differential 
-ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
+ggplot(comprehensive_plot1, aes(x=differential, y = average_rating)) +
     geom_jitter(
       colour = "gray",
       alpha = .6,
@@ -114,21 +116,114 @@ ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
 
 ```{r}
 #| label: heat-map-question-1
-#| echo: false
-#| warning: false
 
-comprehensive_heat <- comprehensive |>
-  filter(maxplayers <50)
+#just for consistency's sake, create new variable
+comprehensive_plot2 <- comprehensive
 
-p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
-  geom_tile() + scale_fill_gradient(low = "white", high = "red")+
-  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + 
-  theme_grey() + 
+#create heatmap
+p <- ggplot(comprehensive_plot2, aes(x = minplayers, y = maxplayers, fill = average)) +
+  geom_tile(height = 1, width = 1) + 
+  scale_fill_gradient(low = "white", high = "red")+
+  labs(title = "Games supporting more players are more highly rated", 
+       x = "Minimum players", 
+       y = "Maximum players", 
+       fill = "Average Rating") + 
+  #adjust visual settings for clarity
   guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) +
-  coord_cartesian(ylim = c(0,5), xlim=c(0,12))
+  coord_cartesian(ylim = c(1,7), xlim=c(1,5)) +
+  #cap scales when data becomes too sparse
+  scale_x_continuous(breaks = c(1:5)) +
+  scale_y_continuous(breaks = c(1:7)) +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank())
 
 p
 ```
+
+```{r}
+#create expansions total in each year
+comprehensive_plot3_expansions <- comprehensive |>
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1,
+         expansions = replace_na(expansions, 0)) |>
+  filter(yearpublished %in% c(2001:2019)) |>
+  select(yearpublished, expansions) |>
+  group_by(yearpublished) |>
+  summarize(expansions_per_year = sum(expansions))
+
+#evaluate average rating for each year
+comprehensive_plot3_averages <- comprehensive |>
+  filter(yearpublished %in% c(2001:2019)) |>
+  select(yearpublished, average) |>
+  group_by(yearpublished) |>
+  summarize(yearly_avg_rating = mean(average))
+
+#combine datasets for visualization work
+comprehensive_plot3 <- comprehensive_plot3_averages |>
+  left_join(comprehensive_plot3_expansions, by = "yearpublished")
+
+#create annotations
+
+description_2001 <- "2001: BGG goes online." |>
+  str_wrap(width = 25)
+
+description_2019 <- "2019: Games registered on BGG had an average rating of 7.25, the highest recorded thus far." |>
+  str_wrap(width = 18)
+
+description_2011 <- "2011: There's a massive increase in the number of expansions released, but average rating stays the same." |>
+  str_wrap(width = 25)
+
+#path with points and annotations highlighting specific aspects of the data
+comprehensive_plot3 |>
+  ggplot(aes(y = yearly_avg_rating)) +
+  geom_path(aes(x = expansions_per_year)) +
+  geom_point(aes(x = 1730, y = 7.252), color = "#AA330B", size = 3) +
+  geom_point(aes(x = 1259, y = 6.663), color = "darkblue", size = 3) +
+  geom_point(aes(x = 268, y = 6.195), color = "#228B22", size = 3) +
+  labs(x = "Total Game Expansions Released", y = "Average Rating of Game",
+       title = "Games' ratings and total expansions have both increased over time",
+       subtitle = "But they don't show a linear relationship") +
+  theme_minimal() +
+  annotate("label", x = 2100, y = 7.05, label = description_2019,  size = 3, color = "#AA330B") +
+  annotate("label", x = 1250, y = 6.41, label = description_2011, size = 3, color = "darkblue") +
+  annotate("label", x = 400, y = 6.1, label = description_2001, size = 3, color = "#228B22")
+```
+
+```{r}
+{r}
+#| label: boxplots-question-2
+
+#recoding expansions as a character variable, topcoded at 7
+comprehensive_plot4 <- comprehensive |>
+  #mutations to one variable done in multiple steps for code simplicity/ease of understanding
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1,
+         expansions = replace_na(expansions, 0),
+         expansions = if_else(expansions > 6, 7, expansions),
+         expansions = as.character(expansions),
+         expansions = str_replace(expansions, '7', '7+'))
+
+#for data work: we saw distribution of expansion count and factored levels 0-6 and 7+ based on the fact that there were only 100+ entries for all numbers 0-6 and we didn't want an unnecessarily noisy set of boxplots. the original code is still available but has been commented out since it is not part of our final visualizations
+
+#comprehensive_plot4 |>
+  #group_by(expansions) |>
+  #summarize(count = n()) |>
+  #filter(count > 100)
+  
+#comprehensive_plot4 |>
+  #ggplot(aes(x = factor(expansions))) +
+  #geom_bar() +
+  #scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
+  #geom_hline(yintercept = 100, color = "red")
+
+#boxplot with log transformations
+comprehensive_plot4 |>
+  ggplot(aes(x = expansions, y = owned)) + 
+  geom_boxplot() + 
+  labs(x = "Number of expansions", y = "Total copies owned", 
+       title = "Games with more expansions tend to be more highly owned") +
+  scale_y_continuous(trans = "log10", labels = scales::comma, breaks = c(1000, 2500, 5000, 10000, 25000, 50000, 750000, 100000)) +
+  theme_minimal()
+```
+
 
 ### Discussion
 
