@@ -84,7 +84,8 @@ comprehensive_q1 <- comprehensive |>
          show.legend = FALSE) +
     geom_line(
       linetype = 2,
-      colour = "#FFCCCB"
+      #colour = "#FFCCCB"
+      colour = "red"
       ) +
     geom_point(
       colour = "red"
