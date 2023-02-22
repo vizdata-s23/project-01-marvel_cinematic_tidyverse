@@ -120,7 +120,9 @@ p
 ## Question 2, Plot 1
 
 ```{r}
-
+comprehensive_plot3 <- comprehensive |>
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
+  group_by()
 ```
 
 ## Question 2, Plot 2
