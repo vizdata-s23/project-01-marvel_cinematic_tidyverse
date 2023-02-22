@@ -13,6 +13,8 @@ execute:
 
 (1 paragraph): Project abstract.
 
+In our project, we sought to determine whether there were any interesting trends within the The Board Games Tidy Tuesday dataset. We want to know if games with higher differences between the minimum number and maximum number of players tend to be more highly rated as well as how the number of expansions for board games changed over time, and whether or not they have had an impact on game ownership. To answer the first question, we utilized a scatterplot, line graph, and heatmap, finding that there was a weak relationship between the differential and the ratings of the respective board game.  
+
 ------------------------------------------------------------------------
 
 ```{r}
@@ -50,8 +52,6 @@ With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehe
 Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
 
 This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious whether games that accommodate for a wider number of people receive higher ratings generally or not. This could suggest that players enjoy and value the option to include more players in their game.
-
-TO-DO: ADD PLOT 2 INTRO
 
 ### Approach
 
