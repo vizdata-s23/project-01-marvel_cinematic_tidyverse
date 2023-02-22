@@ -112,8 +112,7 @@ comprehensive_heat <- comprehensive |>
 
 p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
   geom_tile() + scale_fill_gradient(low = "white", high = "red")+
-  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5,
-                                barheight = 8))
+  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) + coord_cartesian(ylim=c(0,5), xlim = c(0, 12))
 
 p
 ```
