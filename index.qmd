@@ -46,7 +46,7 @@ With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehe
 
 Do games with larger differentials in player counts (e.g. can support a wider range of players) tend to be more highly rated?
 
-This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious if whether games that accommodate for a wider number of people receive higher ratings generally. This could suggest that players enjoy and value the option to include more players in their game.
+This first question of interest will utilize the variables in the data set that represent the minimum number of players, maximum numbers of players, and average rating. We're interested in this question because we're curious whether games that accommodate for a wider number of people receive higher ratings generally or not. This could suggest that players enjoy and value the option to include more players in their game.
 
 TO-DO: ADD PLOT 2 INTRO
 
@@ -112,7 +112,23 @@ ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
 
 ```
 
-TO-DO: ADD PLOT 2 CODE
+```{r}
+#| label: heat-map-question-1
+#| echo: false
+#| warning: false
+
+comprehensive_heat <- comprehensive |>
+  filter(maxplayers <50)
+
+p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
+  geom_tile() + scale_fill_gradient(low = "white", high = "red")+
+  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + 
+  theme_grey() + 
+  guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) +
+  coord_cartesian(ylim = c(0,5), xlim=c(0,12))
+
+p
+```
 
 ### Discussion
 
