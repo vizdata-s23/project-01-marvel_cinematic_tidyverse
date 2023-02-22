@@ -230,7 +230,7 @@ comprehensive_plot4 |>
 
 From the first plot, the red line that connects the average ratings suggests that there is a minimal relationship between the differential of players and the board game's rating. This is surprising to us because we had initially believed that games that can incorporate a wider range of people would be more popular, since you would be able to play it in a greater variety of scenarios (with more or less players). Similarily, we noticed in the dataset that games with larger differentials were commonly classified as party games or trivia games, which we also speculated may increase their rating. We can see that the number of board game observations decreases as the differential increases, so this can explain why the trend line is less consistent as the differential increases. We speculate that there are less games that have greater differentials in general, so that is reflected in this dataset.
 
-TO-DO: ADD PLOT 2 DISCUSSION
+The second plot also shows a minimal relationship between the number of players and the average rating of the board game. There is a slight concentration of higher ratings with games that have higher maximum player values and lower minimum player values. Towards the outskirts of the graph, we see that most of the games are rated fairly low. This somewhat supports are initial intuitions that games that support a wider range of players are more highly rated, which may explain to some extent the higher ratings on the left side of the heatmap. However, the data is not strong enough to make any definitive conclusions.  
 
 ## Question 2: Title that relates to the question you're answering
 
