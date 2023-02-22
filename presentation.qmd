@@ -16,7 +16,6 @@ execute:
 ```{r}
 #| label: load-packages
 #| include: false
-#| message: false
 
 # Add any additional packages you need to this chunk
 # Remove any packages from this list that you're not using
@@ -31,7 +30,6 @@ library(hexbin)
 ```{r}
 #| label: setup
 #| include: false
-#| message : false
 
 # For better figure resolution
 knitr::opts_chunk$set(
@@ -86,8 +84,7 @@ comprehensive_q1 <- comprehensive |>
          show.legend = FALSE) +
     geom_line(
       linetype = 2,
-      #colour = "#FFCCCB"
-      colour = "red"
+      colour = "#FFCCCB"
       ) +
     geom_point(
       colour = "red"
@@ -114,7 +111,10 @@ comprehensive_heat <- comprehensive |>
 
 p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
   geom_tile() + scale_fill_gradient(low = "white", high = "red")+
-  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + theme_grey() + guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) + coord_cartesian(ylim=c(0,5), xlim = c(0, 12))
+  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + 
+  theme_grey() + 
+  guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) +
+  coord_cartesian(ylim = c(0,5), xlim=c(0,12))
 
 p
 ```
@@ -122,18 +122,35 @@ p
 ## Question 2, Plot 1
 
 ```{r}
-comprehensive_plot3 <- comprehensive |>
-  mutate(expansions = str_count(boardgameexpansion, ',') + 1) |>
-  group_by()
+comprehensive_plot3_expansions <- comprehensive |>
+  mutate(expansions = str_count(boardgameexpansion, ',') + 1,
+         expansions = replace_na(expansions, 0)) |>
+  filter(yearpublished %in% c(2001:2019)) |>
+  select(yearpublished, expansions) |>
+  group_by(yearpublished) |>
+  summarize(expansions_per_year = sum(expansions))
+
+comprehensive_plot3_averages <- comprehensive |>
+  filter(yearpublished %in% c(2001:2019)) |>
+  select(yearpublished, average) |>
+  group_by(yearpublished) |>
+  summarize(yearly_avg_rating = mean(average))
+
+comprehensive_plot3 <- comprehensive_plot3_averages |>
+  left_join(comprehensive_plot3_expansions, by = "yearpublished")
+
+comprehensive_plot3 |>
+  ggplot(aes(x = expansions_per_year, y = yearly_avg_rating)) +
+  geom_path() +
+  geom_point(aes(x = 2271, y = 6.766564), color = "red") +
+  geom_point(aes(x = 1730, y = 7.252), color = "red") +
+  labs(x = "Total Game Expansions Released", y = "Average Rating of Game")
+
 ```
 
 ## Question 2, Plot 2
 
 ```{r}
-#| label: Question 2 - Plot 1
-#| echo: false
-#| warning: false
-
 comprehensive_plot4 <- comprehensive |>
   mutate(expansions = str_count(boardgameexpansion, ',') + 1,
          expansions = replace_na(expansions, 0))
@@ -144,16 +161,18 @@ comprehensive_plot4 |>
   filter(count > 100)
 
 comprehensive_plot4 |>
-  ggplot(aes(x = factor(expansions), fill = factor(expansions))) +
+  ggplot(aes(x = factor(expansions))) +
   geom_bar() +
   scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
-  geom_hline(yintercept = 100, color = "red") + labs(title = "Board Game Expansions vs Number Owned", x = "Number of Expansions", y = "Number Owned")+
-  theme(legend.position="none")
+  geom_hline(yintercept = 100, color = "red")
 
 comprehensive_plot4 |>
   filter(expansions < 7) |>
-  ggplot(aes(x = factor(expansions), y = log(owned))) + 
-  geom_boxplot() + labs(title = "Board Game Expansions vs Number Owned", x = "log(Number of Expansions)", y = "log(Number Owned)")
+  ggplot(aes(x = factor(expansions), y = owned)) + 
+  geom_boxplot() + 
+  labs(x = "Number of expansions", y = "Total copies owned") +
+  scale_y_continuous(trans = "log10", labels = scales::comma, breaks = c(1000, 2500, 5000, 10000, 25000, 50000, 750000, 100000))
+  
 ```
 
 ## Question 2
