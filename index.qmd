@@ -11,7 +11,6 @@ execute:
 
 ## Abstract
 
-(1 paragraph): Project abstract.
 
 In our project, we sought to determine whether there were any interesting trends within the The Board Games Tidy Tuesday dataset. We want to know if games with higher differences between the minimum number and maximum number of players tend to be more highly rated as well as how the number of expansions for board games changed over time, and whether or not they have had an impact on game ownership. To answer the first question, we utilized a scatterplot, line graph, and heatmap, finding that there was a weak relationship between the differential and the ratings of the respective board game.  To answer the second question, we used a path diagram, which indicated that the number of expansions and the average rating of newly-released games were both increasing over time, and a series of boxplots, which told us that games with more expansions generally had higher ownership than those with fewer expansions.
 
@@ -43,7 +42,7 @@ The Board Games Tidy Tuesday dataset, published on January 25th, 2022, was origi
 
 With `r nrow(comprehensive)` board games, the data set includes `r ncol(comprehensive)` characteristics: `r names(comprehensive)`.
 
-## Question 1: Title that relates to the question you're answering
+## Question 1: Are games that allow wider ranges of players more highly rated?
 
 ### Introduction
 
@@ -60,7 +59,6 @@ We also created a heatmap to visualize the average rating of a game based on bot
 ### Analysis
 
 ```{r}
-
 #| label: fig-scatter-plot-question-1
 
 #data preparation 
@@ -135,7 +133,7 @@ From the first plot, the red line that connects the average ratings suggests tha
 
 The second plot also shows a minimal relationship between the number of players and the average rating of the board game. There is a slight concentration of higher ratings with games that have higher maximum player values and lower minimum player values. Towards the outskirts of the graph, we see that most of the games are rated fairly low. This somewhat supports are initial intuitions that games that support a wider range of players are more highly rated, which may explain to some extent the higher ratings on the left side of the heatmap. However, the data is not strong enough to make any definitive conclusions.  
 
-## Question 2: Title that relates to the question you're answering
+## Question 2: How do expansions releases correlate to rating or ownership?
 
 ### Introduction
 
