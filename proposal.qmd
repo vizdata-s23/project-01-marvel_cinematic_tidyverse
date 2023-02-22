@@ -14,8 +14,8 @@ editor: visual
 
 library(tidyverse)
 
-ratings <- readr::read_csv('data/ratings.csv')
-details <- readr::read_csv('data/details.csv')
+ratings <- read_csv('data/ratings.csv')
+details <- read_csv('data/details.csv')
 comprehensive <- full_join(details, ratings, by = "id") |>
   filter(owned > 500) |>
   select(-num.x, -num.y, -year, -name)
