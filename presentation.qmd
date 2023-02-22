@@ -16,6 +16,7 @@ execute:
 ```{r}
 #| label: load-packages
 #| include: false
+#| message: false
 
 # Add any additional packages you need to this chunk
 # Remove any packages from this list that you're not using
@@ -30,6 +31,7 @@ library(hexbin)
 ```{r}
 #| label: setup
 #| include: false
+#| message : false
 
 # For better figure resolution
 knitr::opts_chunk$set(
