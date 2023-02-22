@@ -3,7 +3,7 @@ title: "Are You Board Yet?"
 subtitle: "STA/ISS 313 - Spring 2023 - Project 1"
 author: "Marvel Cinematic Tidyverse"
 title-slide-attributes:
-  data-background-image: images/watercolour_sys02_img34_teacup-ocean.jpg
+  data-background-image: images/bg-background-title.jpg
   data-background-size: stretch
   data-slide-number: none
 format: revealjs
@@ -17,11 +17,8 @@ execute:
 #| label: load-packages
 #| include: false
 
-# Add any additional packages you need to this chunk
-# Remove any packages from this list that you're not using
 library(tidyverse)
 library(tidymodels)
-library(palmerpenguins)
 library(gt)
 library(hexbin)
 
@@ -53,19 +50,24 @@ comprehensive <- full_join(details, ratings, by = "id") |>
   select(-num.x, -num.y, -year, -name, -thumbnail, -url)
 ```
 
-## Introduction
+## Introduction {.smaller}
 
--   What do we want to write here?
+-   Data collected from BoardGameGeek, largest online aggregator of board games in January 2022
 
--   Explain dataset or questions or both?
+    -   Records mechanics, player counts, ownership, playtime, average rating etc. for 8,000 games with min. 500+ reported copies owned
 
-## Question 1, Plot 1
+-   Two motivating questions:
+
+    -   Does the range of total number of players supported tell us anything about a game's rating?
+
+    -   Does the number of expansions a game has tell us anything about a game's sales (ownership)?
+
+## Question 1: Player range and rating
 
 ```{r}
 #| label: scatter-plot-question-1
-#| echo: false
-#| warning: false
-comprehensive_q1 <- comprehensive |>
+
+comprehensive_plot1 <- comprehensive |>
   mutate(
     differential = maxplayers-minplayers
   ) |>
@@ -75,16 +77,16 @@ comprehensive_q1 <- comprehensive |>
     average_rating = mean(average)
   )
 
-  ggplot(comprehensive_q1, aes(x=differential, y = average_rating)) +
+  ggplot(comprehensive_plot1, aes(x=differential, y = average_rating)) +
     geom_jitter(
       colour = "gray",
-      alpha = .6,
+      alpha = .5,
     aes(x=differential,
           y = average),
          show.legend = FALSE) +
     geom_line(
       linetype = 2,
-      colour = "#FFCCCB"
+      colour = "#E84E93"
       ) +
     geom_point(
       colour = "red"
@@ -92,36 +94,44 @@ comprehensive_q1 <- comprehensive |>
     scale_x_continuous(breaks = seq(0,25,5), minor_breaks = c(0:25)) +
     scale_y_continuous(breaks = seq(2,10,1), minor_breaks = seq(2,10,.5)) +
     labs(
-      x = "Differential",
+      x = "Range of Players Supported",
       y = "Rating",
-      title = "Average Rating as Differential Increases ",
-      subtitle = "Suggests Minimal Relationship") +
+      title = "There's little relationship between rating and player differential") +
     theme_minimal()
 ```
 
-## Question 1, Plot 2
+## Question 1: Ratings, by range
 
 ```{r}
 #| label: heat-map-question-1
-#| echo: false
-#| warning: false
 
-comprehensive_heat <- comprehensive |>
+comprehensive_plot2 <- comprehensive |>
   filter(maxplayers <50)
 
-p <- ggplot(comprehensive_heat, aes(x=maxplayers, y = minplayers, fill = average)) +
-  geom_tile() + scale_fill_gradient(low = "white", high = "red")+
-  labs(title = "Average Rating Based on Min and Max Players", x = "Minimum Number of Players", y = "Maximum Number of Players", fill = "Average Rating") + 
-  theme_grey() + 
+p <- ggplot(comprehensive_plot2, aes(x = minplayers, y = maxplayers, fill = average)) +
+  geom_tile(height = 1, width = 1) + 
+  scale_fill_gradient(low = "white", high = "red")+
+  labs(title = "Games supporting more players are more highly rated", 
+       x = "Minimum players", 
+       y = "Maximum players", 
+       fill = "Average Rating") + 
   guides(fill = guide_colourbar(barwidth = 0.5, barheight = 8)) +
-  coord_cartesian(ylim = c(0,5), xlim=c(0,12))
+  coord_cartesian(ylim = c(1,7), xlim=c(1,5)) +
+  scale_x_continuous(breaks = c(1:5)) +
+  scale_y_continuous(breaks = c(1:7)) +
+  theme_minimal() +
+  theme(panel.grid.major = element_blank())
 
 p
 ```
 
-## Question 2, Plot 1
+## Question 2: Expansions over time
 
 ```{r}
+#| label: path-diagram-question-2
+#| echo: false
+#| warning: false
+
 comprehensive_plot3_expansions <- comprehensive |>
   mutate(expansions = str_count(boardgameexpansion, ',') + 1,
          expansions = replace_na(expansions, 0)) |>
@@ -139,40 +149,72 @@ comprehensive_plot3_averages <- comprehensive |>
 comprehensive_plot3 <- comprehensive_plot3_averages |>
   left_join(comprehensive_plot3_expansions, by = "yearpublished")
 
+description_2001 <- "2001: BGG goes online." |>
+  str_wrap(width = 25)
+
+description_2019 <- "2019: Games registered on BGG had an average rating of 7.25, the highest ever recorded thus far." |>
+  str_wrap(width = 18)
+
+description_2011 <- "2011: There's a massive increase in the number of expansions released, but average rating stays the same." |>
+  str_wrap(width = 25)
+
 comprehensive_plot3 |>
-  ggplot(aes(x = expansions_per_year, y = yearly_avg_rating)) +
-  geom_path() +
-  geom_point(aes(x = 2271, y = 6.766564), color = "red") +
-  geom_point(aes(x = 1730, y = 7.252), color = "red") +
-  labs(x = "Total Game Expansions Released", y = "Average Rating of Game")
+  ggplot(aes(y = yearly_avg_rating)) +
+  geom_path(aes(x = expansions_per_year)) +
+  geom_point(aes(x = 1730, y = 7.252), color = "#AA330B", size = 3) +
+  geom_point(aes(x = 1259, y = 6.663), color = "darkblue", size = 3) +
+  geom_point(aes(x = 268, y = 6.195), color = "#228B22", size = 3) +
+  labs(x = "Total Game Expansions Released", y = "Average Rating of Game",
+       title = "Games' ratings and total expansions have both increased over time",
+       subtitle = "But they don't show a linear relationship") +
+  theme_minimal() +
+  annotate("label", x = 2100, y = 7.05, label = description_2019,  size = 3, color = "#AA330B") +
+  annotate("label", x = 1250, y = 6.41, label = description_2011, size = 3, color = "darkblue") +
+  annotate("label", x = 400, y = 6.1, label = description_2001, size = 3, color = "#228B22")
 
 ```
 
-## Question 2, Plot 2
+## Question 2: Expansions v. Ownership
 
 ```{r}
+#| label: boxplots-question-2
+
+
 comprehensive_plot4 <- comprehensive |>
+  #mutations to one variable done in multiple steps for code simplicity/ease of understanding
   mutate(expansions = str_count(boardgameexpansion, ',') + 1,
-         expansions = replace_na(expansions, 0))
+         expansions = replace_na(expansions, 0),
+         expansions = if_else(expansions > 6, 7, expansions),
+         expansions = as.character(expansions),
+         expansions = str_replace(expansions, '7', '7+'))
+
+#for data work: testing to see distribution of expansion count
+
+#comprehensive_plot4 |>
+  #group_by(expansions) |>
+  #summarize(count = n()) |>
+  #filter(count > 100)
+  
+#comprehensive_plot4 |>
+  #ggplot(aes(x = factor(expansions))) +
+  #geom_bar() +
+  #scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
+  #geom_hline(yintercept = 100, color = "red")
 
 comprehensive_plot4 |>
-  group_by(expansions) |>
-  summarize(count = n()) |>
-  filter(count > 100)
-
-comprehensive_plot4 |>
-  ggplot(aes(x = factor(expansions))) +
-  geom_bar() +
-  scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
-  geom_hline(yintercept = 100, color = "red")
-
-comprehensive_plot4 |>
-  filter(expansions < 7) |>
-  ggplot(aes(x = factor(expansions), y = owned)) + 
+  ggplot(aes(x = expansions, y = owned)) + 
   geom_boxplot() + 
-  labs(x = "Number of expansions", y = "Total copies owned") +
-  scale_y_continuous(trans = "log10", labels = scales::comma, breaks = c(1000, 2500, 5000, 10000, 25000, 50000, 750000, 100000))
+  labs(x = "Number of expansions", y = "Total copies owned", 
+       title = "Games with more expansions tend to be more highly owned") +
+  scale_y_continuous(trans = "log10", labels = scales::comma, breaks = c(1000, 2500, 5000, 10000, 25000, 50000, 750000, 100000)) +
+  theme_minimal()
   
 ```
 
-## Question 2
+## Limitations and Conclusions
+
+-   People like games that support a wide range of players
+
+-   On average, board game quality has gone up over time
+
+-   Future revisions: Focus on subsets of board games
