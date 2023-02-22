@@ -144,10 +144,11 @@ comprehensive_plot4 |>
   filter(count > 100)
 
 comprehensive_plot4 |>
-  ggplot(aes(x = factor(expansions))) +
+  ggplot(aes(x = factor(expansions), fill = factor(expansions))) +
   geom_bar() +
   scale_x_discrete(limits = c("1", "2", "3", "4", "5", "6")) +
-  geom_hline(yintercept = 100, color = "red") + labs(title = "Board Game Expansions vs Number Owned", x = "Number of Expansions", y = "Number Owned")
+  geom_hline(yintercept = 100, color = "red") + labs(title = "Board Game Expansions vs Number Owned", x = "Number of Expansions", y = "Number Owned")+
+  theme(legend.position="none")
 
 comprehensive_plot4 |>
   filter(expansions < 7) |>
